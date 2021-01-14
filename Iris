@@ -1,0 +1,29 @@
+head(Iris)
+dim(Iris)
+str(Iris)
+summary(Iris)
+colSums(is.na(Iris))
+mydata = Iris[,c(2,3,4,5)]
+View(mydata)
+scaled_data = as.matrix(scale(mydata))
+#Elbow Method for finding the optimal number of clusters
+set.seed(123)
+# Compute and plot for k = 2 to k = 15.
+k.max = 15
+data = scaled_data
+wss = sapply(1:k.max, 
+              function(k){kmeans(data, k, nstart=50,iter.max = 15 )$tot.withinss})
+wss
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
+kmm = kmeans(scaled_data,3,nstart = 50,iter.max = 15)  
+kmm
+library(factoextra)
+fviz_cluster(kmm, data = data,
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800"), 
+             geom = "point",
+             ellipse.type = "convex", 
+             ggtheme = theme_bw()
+             )
