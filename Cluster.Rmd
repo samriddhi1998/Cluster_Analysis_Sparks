@@ -1,0 +1,63 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+#Samriddhi Jaiswal
+```{r}
+head(Iris)
+```
+
+```{r}
+dim(Iris)
+str(Iris)
+summary(Iris)
+```
+
+```{r}
+colSums(is.na(Iris))
+```
+
+```{r}
+mydata = Iris[,c(2,3,4,5)]
+View(mydata)
+```
+
+```{r}
+scaled_data = as.matrix(scale(mydata))
+```
+
+```{r}
+#Elbow Method for finding the optimal number of clusters
+set.seed(123)
+# Compute and plot for k = 2 to k = 15.
+k.max = 15
+data = scaled_data
+wss = sapply(1:k.max, 
+              function(k){kmeans(data, k, nstart=50,iter.max = 15 )$tot.withinss})
+wss
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
+```
+
+#The optimum number of clusters are 3
+
+```{r}
+kmm = kmeans(scaled_data,3,nstart = 50,iter.max = 15)  
+kmm
+```
+
+```{r}
+library(factoextra)
+fviz_cluster(kmm, data = data,
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800"), 
+             geom = "point",
+             ellipse.type = "convex", 
+             ggtheme = theme_bw()
+             )
+```
+
